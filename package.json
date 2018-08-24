@@ -18,8 +18,12 @@
   },
   "homepage": "https://github.com/chris-peng-1244/third-time-is-charm#readme",
   "dependencies": {
+    "ajv": "^6.5.3",
+    "bip39": "^2.5.0",
     "dotenv": "^6.0.0",
+    "ethereumjs-util": "^5.2.0",
     "express": "^4.16.3",
+    "hdkey": "^1.1.0",
     "web3": "^1.0.0-beta.35",
     "winston": "^3.0.0"
   },
@@ -28,9 +32,11 @@
     "babel-eslint": "^8.2.6",
     "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
+    "chai": "^4.1.2",
     "eslint": "^5.4.0",
     "eslint-config-google": "^0.9.1",
     "eslint-plugin-flowtype": "^2.50.0",
-    "flow-bin": "^0.79.1"
+    "flow-bin": "^0.79.1",
+    "mocha": "^5.2.0"
   }
 }
