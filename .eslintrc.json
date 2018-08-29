@@ -1,6 +1,6 @@
 {
   "extends": [
-    "google",
+    "eslint:recommended",
     "plugin:flowtype/recommended"
   ],
   "env": {
@@ -11,7 +11,11 @@
     "ecmaVersion": 8
   },
   "plugins": [
-    "flowtype"
+    "flowtype",
+    "mocha"
   ],
+  "rules": {
+    "mocha/no-exclusive-tests": "error"
+  },
   "parser": "babel-eslint"
 }

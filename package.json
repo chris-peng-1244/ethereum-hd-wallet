@@ -4,7 +4,7 @@
   "description": "An Ethereum wallet",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "babel src -d lib --source-maps",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,23 +20,33 @@
   "dependencies": {
     "ajv": "^6.5.3",
     "bip39": "^2.5.0",
+    "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
-    "ethereumjs-util": "^5.2.0",
     "express": "^4.16.3",
     "hdkey": "^1.1.0",
+    "mysql2": "^1.6.1",
+    "sequelize": "^4.38.0",
+    "sequelize-cli": "^4.1.1",
     "web3": "^1.0.0-beta.35",
     "winston": "^3.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.6",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
     "eslint": "^5.4.0",
-    "eslint-config-google": "^0.9.1",
     "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-mocha": "^5.2.0",
     "flow-bin": "^0.79.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-sourcemaps": "^2.6.4",
     "mocha": "^5.2.0"
   }
 }
