@@ -7,7 +7,7 @@ import {Account} from '../models';
 let repo;
 class WalletRepository {
     _wallet: Wallet;
-    _walletDb: Object;
+    _accountDb: Object;
     static create(): WalletRepository {
         if (!repo) {
             repo = new WalletRepository();
@@ -17,23 +17,33 @@ class WalletRepository {
 
     constructor() {
         this._wallet = Wallet.getInstance();
-        this._walletDb = Account;
+        this._accountDb = Account;
     }
 
     async createAccount(index: number): Promise<WalletAccount> {
         const account = this._wallet.getAccount(index);
-        const savedAccount = await this._walletDb.findOne({
+        const savedAccount = await this._accountDb.findOne({
             where:{
                 address: account.getAddress(),
             }
         });
         if (!savedAccount) {
-            await this._walletDb.create({
+            await this._accountDb.create({
                 address: account.getAddress(),
                 userId: index,
             });
         }
         return account;
+    }
+
+    async findAccountByAddress(address: string): Promise<WalletAccount | null> {
+        const savedAccount = await this._accountDb.findOne({
+            where:{ address }
+        });
+        if (!savedAccount) {
+            return null;
+        }
+        return Wallet.getInstance().getAccount(savedAccount.userId);
     }
 }
 

@@ -12,7 +12,7 @@ describe("Wallet", () => {
         account.getAddress().should.match(/^0x/);
     });
 
-    it("It should recover account by index", async() => {
+    it("It should recover from by index", async() => {
         const mnemonic = bip39.generateMnemonic();
         let wallet = Wallet.getFromMnemonic(mnemonic);
         const account1 = wallet.getAccount(1);

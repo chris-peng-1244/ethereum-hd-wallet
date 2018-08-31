@@ -6,12 +6,12 @@ chai.use(chaiHttp);
 const app = require('../../lib/index').default;
 const {Account, sequelize} = require('../../lib/models');
 
-describe("/account", () => {
+describe("/from", () => {
     beforeEach(async() => {
         await sequelize.query('TRUNCATE TABLE accounts');
     });
 
-    it("It should create a new account", async() => {
+    it("It should create a new from", async() => {
         const res = await chai.request(app)
             .post('/accounts')
             .type('application/json')
