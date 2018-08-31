@@ -5,7 +5,9 @@ import logger from './logger';
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-const client = redis.createClient();
+const client = redis.createClient({
+    prefix: 'casino:',
+});
 
 client.on('error', err => {
     logger.error('[Redis] Error ' + err);

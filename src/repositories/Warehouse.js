@@ -1,6 +1,6 @@
 // @flow
 import Transaction from "../domains/Transaction";
-import {AccountDb, TransactionDb, sequelize} from '../models';
+import {Account as AccountDb, Transaction as TransactionDb, sequelize} from '../models';
 import TransactionSources from "../enums/TransactionSources";
 import logger from '../logger';
 
@@ -25,6 +25,9 @@ class Warehouse {
     }
 
     async _createSystemTransaction(transaction: Transaction): Promise<boolean> {
+        if (await this._transactionAlreadyExists(transaction)) {
+            return false;
+        }
         const [from, to] = await Promise.all([
             AccountDb.findOne({
                 where: {address: transaction.from},
@@ -53,7 +56,10 @@ class Warehouse {
     }
 
     async _createEthereumDepositTransaction(transaction: Transaction): Promise<boolean> {
-        const to = await AccountDb.findOne({
+        if (await this._transactionAlreadyExists(transaction)) {
+            return false;
+        }
+        let to = await AccountDb.findOne({
             where: {address: transaction.to},
         });
 
@@ -62,9 +68,9 @@ class Warehouse {
         }
         try {
             await sequelize.transaction(async t => {
-                await TransactionDb.create(transactionModel2Db(transaction), {transaction: t});
                 to.balance = to.balance + transaction.valueInWei;
                 await to.save({transaction: t});
+                await TransactionDb.create(transactionModel2Db(transaction), {transaction: t});
             });
             return true;
         } catch (e) {
@@ -74,6 +80,9 @@ class Warehouse {
     }
 
     async _createEthereumWithdrawTransaction(transaction: Transaction): Promise<boolean> {
+        if (await this._transactionAlreadyExists(transaction)) {
+            return false;
+        }
         const from = await AccountDb.findOne({
             where: {address: transaction.from},
         });
@@ -95,6 +104,13 @@ class Warehouse {
             logger.error('[Warehouse] Error ' + e);
             return false;
         }
+    }
+
+    async _transactionAlreadyExists(transaction: Transaction): Promise<boolean> {
+        const count = await TransactionDb.count({
+            where: {transactionHash: transaction.transactionHash}
+        });
+        return count > 0;
     }
 }
 

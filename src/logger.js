@@ -1,3 +1,4 @@
+import config from './config';
 import {createLogger, transports, format } from 'winston';
 
 const logger = createLogger({
@@ -5,9 +6,11 @@ const logger = createLogger({
     transports: [
         new transports.File({
             filename: 'logs/app.log',
-            level: 'info'
+            level: config.LOG_LEVEL,
         }),
-        new transports.Console()
+        new transports.Console({
+            level: 'debug',
+        })
     ]
 });
 
