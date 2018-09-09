@@ -53,7 +53,7 @@ async function scanNewBlock() {
                 await findNewDeposit(txHash);
             });
         } catch (e) {
-            logger.error(e.getMessage());
+            logger.error(e.stack);
             return -1;
         }
 

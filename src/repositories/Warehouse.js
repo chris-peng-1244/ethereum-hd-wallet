@@ -1,8 +1,10 @@
 // @flow
 import Transaction from "../domains/Transaction";
-import {Account as AccountDb, Transaction as TransactionDb, sequelize} from '../models';
+import {User as AccountDb, Transaction as TransactionDb, UserBalanceLog as UserBalanceLogDb, sequelize} from '../models';
 import TransactionSources from "../enums/TransactionSources";
 import logger from '../logger';
+import web3 from '../web3';
+import {fromWei, toWei} from '../eth-unit';
 
 class Warehouse {
 
@@ -30,10 +32,10 @@ class Warehouse {
         }
         const [from, to] = await Promise.all([
             AccountDb.findOne({
-                where: {address: transaction.from},
+                where: {ethereumAddress: transaction.from},
             }),
             AccountDb.findOne({
-                where: {address: transaction.to},
+                where: {ethereumAddress: transaction.to},
             }),
         ]);
         if (!from || !to) return false;
@@ -60,17 +62,21 @@ class Warehouse {
             return false;
         }
         let to = await AccountDb.findOne({
-            where: {address: transaction.to},
+            where: {ethereumAddress: transaction.to},
         });
+        to.balance = toWei(to.balance);
 
         if (!to) {
             return false;
         }
         try {
             await sequelize.transaction(async t => {
-                to.balance = to.balance + transaction.valueInWei;
+                to.balance = fromWei(to.balance + transaction.valueInWei);
                 await to.save({transaction: t});
                 await TransactionDb.create(transactionModel2Db(transaction), {transaction: t});
+                await UserBalanceLogDb.create({
+                    userId: to.id, value: fromWei(transaction.valueInWei), type: 'TRANSACTION_DEPOSIT',
+                }, { transaction: t });
             });
             return true;
         } catch (e) {
@@ -86,6 +92,7 @@ class Warehouse {
         const from = await AccountDb.findOne({
             where: {address: transaction.from},
         });
+        from.balance = toWei(from.balance);
 
         if (!from) {
             return false;
@@ -96,7 +103,7 @@ class Warehouse {
         try {
             await sequelize.transaction(async t => {
                 await TransactionDb.create(transactionModel2Db(transaction), {transaction: t});
-                from.balance = from.balance - transaction.valueInWei;
+                from.balance = fromWei(from.balance - transaction.valueInWei);
                 await from.save({transaction: t});
             });
             return true;
@@ -117,8 +124,8 @@ class Warehouse {
 function transactionModel2Db(transaction: Transaction): Object {
     return {
         from: transaction.from,
-        to: transaction.from,
-        valueInWei: transaction.valueInWei,
+        to: transaction.to,
+        value: fromWei(transaction.valueInWei),
         transactionType: transaction.transactionType,
         transactionHash: transaction.transactionHash,
         source: transaction.source,
