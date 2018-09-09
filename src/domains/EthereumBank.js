@@ -40,7 +40,7 @@ class EthereumBank {
                 value: txToBeProcess.amount,
                 gas: 21000,
             }))
-            .on('confirmation', (confirmationNumber, receipt) => {
+            .on('confirmation', async (confirmationNumber, receipt) => {
                 const ourTx = Transaction.createEthereumTransaction({
                     from: rootAccount.getAddress(),
                     to: txToBeProcess.to,

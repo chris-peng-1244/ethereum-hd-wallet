@@ -1,5 +1,4 @@
 // @flow
-import 'babel-polyfill';
 import '../config';
 import web3 from '../web3';
 import redis from '../redis';

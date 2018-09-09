@@ -6,20 +6,16 @@ gulp.task('build', () => {
     gulp.src('src/**/*.js')
         .pipe(sourceMaps.init())
         .pipe(gulpBabel({
-            "plugins": [
-                "transform-object-rest-spread",
-            ],
             "presets": [
-                "env",
-                "flow",
+                ["@babel/env", {targets: {node: "current"}}],
+                "@babel/flow",
             ],
-            "sourceMaps": true,
         }))
         .pipe(sourceMaps.write('.', {
             includeContent: false,
             sourceRoot: './src',
         }))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('lib'));
 });
 
 gulp.task('watch', () => {

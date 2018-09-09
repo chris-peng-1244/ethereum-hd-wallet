@@ -2,7 +2,7 @@
 
 import WalletAccount from "../domains/WalletAccount";
 import Wallet from "../domains/Wallet";
-import {Account} from '../models';
+import {User} from '../models';
 
 let repo;
 class WalletRepository {
@@ -17,21 +17,19 @@ class WalletRepository {
 
     constructor() {
         this._wallet = Wallet.getInstance();
-        this._accountDb = Account;
+        this._accountDb = User;
     }
 
     async createAccount(index: number): Promise<WalletAccount> {
         const account = this._wallet.getAccount(index);
         const savedAccount = await this._accountDb.findOne({
             where:{
-                address: account.getAddress(),
+                id: index,
             }
         });
-        if (!savedAccount) {
-            await this._accountDb.create({
-                address: account.getAddress(),
-                userId: index,
-            });
+        if (savedAccount) {
+            savedAccount.ethereumAddress = account.getAddress();
+            await savedAccount.save();
         }
         return account;
     }

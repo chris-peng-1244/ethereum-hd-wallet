@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import express from 'express';
 import config from './config';
 import logger from './logger';
