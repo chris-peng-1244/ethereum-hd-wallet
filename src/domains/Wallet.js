@@ -7,6 +7,7 @@ import config from '../config';
 let wallet;
 class Wallet {
     root: HDKey;
+    rootAccount: WalletAccount;
     accounts: { [number]: WalletAccount };
 
     constructor(mnemonic: string) {
@@ -37,6 +38,13 @@ class Wallet {
 
         this.accounts[index] = this._createAccount(index);
         return this.accounts[index];
+    }
+
+    getRoot(): WalletAccount {
+        if (!this.rootAccount) {
+            this.rootAccount = new WalletAccount(this.root);
+        }
+        return this.rootAccount;
     }
 
     _createAccount(index: number) {
