@@ -27,6 +27,13 @@ function watch() {
     .then(() => {
         return watch();
     })
+    .catch(err => {
+        logger.error(err.stack);
+        return setTimeoutPromise(1000)
+            .then(() => {
+                return watch();
+            })
+    });
 }
 
 async function scanNewBlock() {
