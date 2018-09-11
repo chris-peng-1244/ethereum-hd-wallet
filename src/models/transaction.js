@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
         source: DataTypes.STRING,
         transactionType: DataTypes.STRING,
         transactionHash: DataTypes.STRING,
-    }, {});
+    }, {
+        tableName: 'transactions',
+    });
     Transaction.associate = function(models) {
         // associations can be defined here
     };
