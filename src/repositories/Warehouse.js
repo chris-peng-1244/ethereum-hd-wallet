@@ -64,11 +64,12 @@ class Warehouse {
         let to = await AccountDb.findOne({
             where: {ethereumAddress: transaction.to},
         });
-        to.balance = toWei(to.balance);
 
         if (!to) {
             return false;
         }
+
+        to.balance = toWei(to.balance);
         try {
             await sequelize.transaction(async t => {
                 to.balance = fromWei(to.balance + transaction.valueInWei);
@@ -92,7 +93,6 @@ class Warehouse {
         const from = await AccountDb.findOne({
             where: {address: transaction.from},
         });
-        from.balance = toWei(from.balance);
 
         if (!from) {
             return false;
@@ -100,6 +100,7 @@ class Warehouse {
         if (from.balance < transaction.valueInWei) {
             return false;
         }
+        from.balance = toWei(from.balance);
         try {
             await sequelize.transaction(async t => {
                 await TransactionDb.create(transactionModel2Db(transaction), {transaction: t});
