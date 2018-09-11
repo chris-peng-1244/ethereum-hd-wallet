@@ -1,15 +1,20 @@
 module.exports = {
-    apps : [{
-        name      : 'Ethereum',
-        script    : 'lib/index.js',
-        env: {
-            NODE_ENV: 'development'
+    apps : [
+        {
+            name      : 'Ethereum',
+            script    : 'lib/index.js',
+            env: {
+                NODE_ENV: 'development'
+            },
+            env_production : {
+                NODE_ENV: 'production'
+            },
+            watch: ['lib']
         },
-        env_production : {
-            NODE_ENV: 'production'
-        },
-        watch: ['lib']
-    }],
+        {
+            name: 'Watch Ethereum',
+            script: 'lib/commands/watchNewTransactions.js',
+        }],
 
     deploy : {
         production : {
