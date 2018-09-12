@@ -34,6 +34,20 @@ class WalletRepository {
         return account;
     }
 
+    async findAllByPage(page: number, limit: number): Promise<WalletAccount[]> {
+        const data = await this._accountDb.findAll({
+            limit,
+            offset: (page-1)*limit,
+        });
+        return data.map(value => {
+            return this._wallet.getAccount(value.id);
+        });
+    }
+
+    async countAll(): Promise<number> {
+        return await this._accountDb.count();
+    }
+
     async findAccountByAddress(address: string): Promise<WalletAccount | null> {
         const savedAccount = await this._accountDb.findOne({
             where:{ address }

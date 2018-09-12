@@ -1,6 +1,7 @@
 // @flow
 import HDKey from 'hdkey';
 import web3 from '../web3';
+import logger from '../logger';
 
 class WalletAccount {
     account: Object;
@@ -10,6 +11,16 @@ class WalletAccount {
 
     getAddress(): string {
         return this.account.address;
+    }
+
+    async sign(data: Object) {
+        try {
+            const signedData = await this.account.signTransaction(data);
+            return signedData.rawTransaction;
+        } catch (e) {
+            logger.error('[WalletAccount] sign ' + e.stack);
+            return '';
+        }
     }
 }
 
