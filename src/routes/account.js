@@ -3,6 +3,8 @@
 import express from 'express';
 import WalletRepository from '../repositories/WalletRepository';
 import WalletAccount from "../domains/WalletAccount";
+import WithdrawQueue from "../repositories/WithdrawQueue";
+import logger from '../logger';
 import boom from 'boom';
 
 const walletRepo = WalletRepository.create();
@@ -17,25 +19,16 @@ router.post('/', async(req: express$Request, res: express$Response) => {
 });
 
 router.post('/withdraw', async(req, res, next) => {
-    const {userId, amount, to} = req.body;
-    const account: WalletAccount = await walletRepo.findByUserId(userId);
-    if (!account) {
-        // TODO better exception handle
-        next(boom.badRequest(`No account ${userId}`));
-    }
-
+    const {amount, to} = req.body;
     let transactionHash;
     try {
-        await ethBank.queueTransaction(to, amount);
+        await WithdrawQueue.create().add(to, amount);
     } catch (e) {
-        // TODO better exception handle
         logger.error('[API withdraw] ' + e.getMessage());
-        throw e;
+        return next(boom.badImplementation('Withdraw failed'));
     }
 
-    return res.json({
-        transactionHash,
-    });
+    return res.json(req.body);
 });
 
 export default router;

@@ -48,19 +48,6 @@ class WalletRepository {
         return await this._accountDb.count();
     }
 
-    async findAccountByAddress(address: string): Promise<WalletAccount | null> {
-        const savedAccount = await this._accountDb.findOne({
-            where:{ address }
-        });
-        if (!savedAccount) {
-            return null;
-        }
-        return Wallet.getInstance().getAccount(savedAccount.userId);
-    }
-
-    async findAccountByUserId(userId: string) {
-
-    }
 }
 
 export default WalletRepository;

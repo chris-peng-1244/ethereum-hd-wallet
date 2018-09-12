@@ -26,7 +26,7 @@ class WalletCollector {
         }
 
         try {
-            await this.bank.transfer(account, this.wallet.getRoot(), balance - fee, gasPrice);
+            await this.bank.transfer(account, this.wallet.getRoot().getAddress(), balance - fee, gasPrice);
             return true;
         } catch (e) {
             logger.error('[WalletCollector] collect failed ' + e.stack);

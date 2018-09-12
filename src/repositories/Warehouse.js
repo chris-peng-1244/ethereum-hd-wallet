@@ -3,7 +3,6 @@ import Transaction from "../domains/Transaction";
 import {User as AccountDb, Transaction as TransactionDb, UserBalanceLog as UserBalanceLogDb, sequelize} from '../models';
 import TransactionSources from "../enums/TransactionSources";
 import logger from '../logger';
-import web3 from '../web3';
 import {fromWei, toWei} from '../eth-unit';
 
 class Warehouse {
