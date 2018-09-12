@@ -19,7 +19,14 @@ module.exports = {
             output: 'logs/watch-ethereum.log',
             error: 'logs/watch-ethereum.log',
             script: 'lib/commands/watchNewTransactions.js',
-        }],
+        },
+        {
+            name: 'Watch Withdraw',
+            output: 'logs/withdraw.log',
+            error: 'logs/withdraw.log',
+            script: 'lib/commands/watchWithdraw.js',
+        },
+    ],
 
     deploy : {
         production : {
