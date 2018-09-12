@@ -43,6 +43,10 @@ class WalletRepository {
         }
         return Wallet.getInstance().getAccount(savedAccount.userId);
     }
+
+    async findAccountByUserId(userId: string) {
+
+    }
 }
 
 export default WalletRepository;

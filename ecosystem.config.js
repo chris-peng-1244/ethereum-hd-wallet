@@ -3,16 +3,21 @@ module.exports = {
         {
             name      : 'Ethereum',
             script    : 'lib/index.js',
+            output: 'logs/wallet-out.log',
+            error: 'logs/wallet-error.log',
             env: {
+                watch: ['lib'],
                 NODE_ENV: 'development'
             },
             env_production : {
+                watch: false,
                 NODE_ENV: 'production'
             },
-            watch: ['lib']
         },
         {
             name: 'Watch Ethereum',
+            output: 'logs/watch-ethereum.log',
+            error: 'logs/watch-ethereum.log',
             script: 'lib/commands/watchNewTransactions.js',
         }],
 
