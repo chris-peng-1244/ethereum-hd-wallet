@@ -22,7 +22,7 @@ class Wallet {
             if (!mnemonic || !mnemonic.length) {
                 throw new  Error("Can't load the mnemonic from configuration");
             }
-            wallet = new Wallet(config.ETHEREUM_WALLET_MNENOMIC);
+            wallet = new Wallet(mnemonic);
         }
         return wallet;
     }
