@@ -38,7 +38,7 @@ async function consumeQueue() {
     const task = await queue.poll();
     const amountInWei = toWei(task.amount);
     if (task.amount <= config.ETHEREUM_WITHDRAW_FEE) {
-        await refund(task.to, amountInWei);
+        await refund(task.from, amountInWei);
         return false;
     }
 
@@ -49,17 +49,17 @@ async function consumeQueue() {
     const amount = amountInWei - toWei(config.ETHEREUM_WITHDRAW_FEE);
     if (balance < (amount + gasPrice * 21000)) {
         logger.info('Not enough balance in root ' + wallet.getRoot().getAddress());
-        await refund(task.to, amountInWei);
+        await refund(task.from, amountInWei);
         return false;
     }
     try {
         if (!await EthereumBank.create().transfer(wallet.getRoot(), task.to, amount, gasPrice)) {
-            await refund(task.to, amountInWei);
+            await refund(task.from, amountInWei);
             return false;
         }
         return true;
     } catch (e) {
-        await refund(task.to, amountInWei);
+        await refund(task.from, amountInWei);
         return false;
     }
 }

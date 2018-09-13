@@ -14,11 +14,11 @@ class WithdrawQueue {
         return queue;
     }
 
-    async add(to: string, amount: number) {
-        await redis.lpushAsync(WITHDRAW_QUEUE, JSON.stringify({to, amount}));
+    async add(from: string, to: string, amount: number) {
+        await redis.lpushAsync(WITHDRAW_QUEUE, JSON.stringify({from, to, amount}));
     }
 
-    async poll(): Promise<{to: string, amount: string}> {
+    async poll(): Promise<{from: string, to: string, amount: string}> {
         const data: string = await redis.rpopAsync(WITHDRAW_QUEUE);
         return JSON.parse(data);
     }

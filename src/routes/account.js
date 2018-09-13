@@ -19,9 +19,9 @@ router.post('/', async(req: express$Request, res: express$Response) => {
 });
 
 router.post('/withdraw', async(req, res, next) => {
-    const {amount, to} = req.body;
+    const {amount, to, from} = req.body;
     try {
-        await WithdrawQueue.create().add(to, amount);
+        await WithdrawQueue.create().add(from, to, amount);
     } catch (e) {
         logger.error('[API withdraw] ' + e.getMessage());
         return next(boom.badImplementation('Withdraw failed'));
