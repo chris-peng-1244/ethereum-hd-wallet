@@ -1,6 +1,5 @@
 // @flow
 import {User} from '../models';
-import {fromWei} from '../eth-unit';
 
 class UserRepository {
     async addBalance(address: string, value: number) {
@@ -9,7 +8,7 @@ class UserRepository {
             return;
         }
 
-        user.balance += fromWei(value);
+        user.balance += value;
         return await user.save();
     }
 }
