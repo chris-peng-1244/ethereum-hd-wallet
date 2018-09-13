@@ -6,7 +6,7 @@ import logger from '../logger';
 class WalletAccount {
     account: Object;
     constructor(hdKey: HDKey) {
-        this.account = web3.eth.accounts.privateKeyToAccount(hdKey.privateKey.toString('hex'));
+        this.account = web3.eth.accounts.privateKeyToAccount('0x' + hdKey.privateKey.toString('hex'));
     }
 
     getAddress(): string {

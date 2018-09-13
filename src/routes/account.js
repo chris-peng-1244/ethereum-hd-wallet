@@ -20,7 +20,6 @@ router.post('/', async(req: express$Request, res: express$Response) => {
 
 router.post('/withdraw', async(req, res, next) => {
     const {amount, to} = req.body;
-    let transactionHash;
     try {
         await WithdrawQueue.create().add(to, amount);
     } catch (e) {
