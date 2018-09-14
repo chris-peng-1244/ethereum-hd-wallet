@@ -13,6 +13,10 @@ class WalletAccount {
         return this.account.address;
     }
 
+    getPrivateKey(): string {
+        return this.account.privateKey;
+    }
+
     async sign(data: Object) {
         try {
             const signedData = await this.account.signTransaction(data);
